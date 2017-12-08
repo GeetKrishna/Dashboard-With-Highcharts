@@ -1,0 +1,106 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+</head>
+
+<body ng-app="dashboardapp" >
+<div ng-controller="DashboardController" >
+  <form name="dashboardinput">
+   <h3>DASHBOARD APPLICATION</h3>
+  <label >Application</label>
+    <select id="applicationselection" ng-model="myForm.application">
+      <option value="iss">ISS</option>
+      <option value="mo">MO</option>
+      <option value="bodw">BODW</option>
+    </select><br />
+    </br>
+  <label >Metrics Category</label>
+    <select id="metricscategoryselection" ng-model="myForm.metricscategory">
+      <option value="ss">S&S</option>
+      <option value="qm">Q&M</option>
+      </select><br />
+    </br>
+    <label >Metrics Type</label>
+    <select id="metrictypeselection" ng-model="myForm.metricstype">
+      <option value="utilization">UTILIZATION</option>
+      <option value="accountfailure">ACCOUNT FAILURE</option>
+      <option value="uatdefects">UAT DEFECTS</option>
+      </select><br />
+    </br>
+    <table border="0">
+<tr>
+  <td>Release</td><td><input name="release" type="number" step="0.01" ng-model="myForm.release" >
+</td>
+</tr>
+<tr>
+  <td>Iteration</td><td><input name="iteration" type="number" step="0.01" ng-model="myForm.iteration" >
+</td>
+</tr>
+<tr>
+  <td>Start Date</td><td><input name="startdate" type="date" ng-model="myForm.startdate" >
+</td>
+</tr>
+<tr>
+  <td>End Date</td><td><input name="enddate" type="date" ng-model="myForm.enddate" >
+</td>
+</tr>
+<tr>
+<td>
+ <button ng-click="myForm.submitForm()">Submit</button></td></tr>
+</table>
+</form>
+
+
+<div>{{myForm.application}}
+  </div>
+  <div>{{myForm.metricscategory}}
+  </div>
+   <div>{{myForm.metricstype}}
+  </div>
+   <div>{{myForm.release}}
+  </div>
+   <div>{{myForm.iteration}}
+  </div>
+   <div>{{myForm.startdate}}
+  </div>
+  <div>{{myForm.enddate}}
+  </div>
+</div>
+
+
+<script>
+   angular.module("dashboardapp", [])
+     .controller("DashboardController", function($scope, $http) {
+       $scope.myForm = {};
+       
+
+     $scope.myForm.submitForm = function(item, event) {
+       console.log("Submitting form");
+       var dataObject = {
+          application: $scope.myForm.application
+          ,metricCategory: $scope.myForm.metricscategory
+          ,metricType: $scope.myForm.metricstype
+          ,releaseNo: $scope.myForm.release
+          ,iteration: $scope.myForm.iteration
+          ,startDate: $scope.myForm.startdate
+          ,endDate: $scope.myForm.enddate
+       };
+
+       var responsePromise = $http.post("/submit", dataObject, {});
+       responsePromise.success(function(dataFromServer, status, headers, config) {
+          console.log(dataFromServer.title);
+       }); 
+       responsePromise.error(function(data, status, headers, config) {
+          alert("Submitting form failed!");
+       }); 
+     }
+
+  });
+           
+</script>
+
+</body>
+</html>
